@@ -10,3 +10,6 @@ pinned: false
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+# Hot Dog Classifier App
+A Streamlit app that classifies whether an image contains a hot dog or not using the "julien-c/hotdog-not-hotdog" model.
