@@ -9,23 +9,35 @@ import requests
 from io import BytesIO
 from typing import List, Dict
 
-# Initialize models
+# Initialize models with better error handling
 @st.cache_resource
 def load_models():
-    return {
-        'sentiment': pipeline("sentiment-analysis"),
-        'text_gen': pipeline("text2text-generation", model="facebook/bart-large-cnn"),
-        'embedding': SentenceTransformer('all-MiniLM-L6-v2'),
-        'clip': VisionTextDualEncoderModel.from_pretrained("openai/clip-vit-base-patch32"),
-        'processor': AutoProcessor.from_pretrained("openai/clip-vit-base-patch32"),
-        'genre': pipeline("text-classification", model="facebook/bart-large-mnli"),
-        'plot': pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-    }
+    models = {}
+    try:
+        models['sentiment'] = pipeline("sentiment-analysis")
+        models['text_gen'] = pipeline("text2text-generation", model="facebook/bart-large-cnn")
+        models['embedding'] = SentenceTransformer('all-MiniLM-L6-v2')
+        models['clip'] = VisionTextDualEncoderModel.from_pretrained("openai/clip-vit-base-patch32")
+        models['processor'] = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
+        models['genre'] = pipeline("text-classification", model="facebook/bart-large-mnli")
+        models['plot'] = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+        
+        # Try loading multilingual model, but don't fail if it doesn't work
+        try:
+            models['multilingual'] = pipeline("translation", 
+                                           model="facebook/mbart-large-50-many-to-many-mmt",
+                                           tokenizer="facebook/mbart-large-50-many-to-many-mmt")
+        except Exception as e:
+            st.warning(f"Multilingual support not available: {str(e)}")
+            models['multilingual'] = None
+            
+    except Exception as e:
+        st.error(f"Error loading models: {str(e)}")
+        raise
+    
+    return models
 
 models = load_models()
-
-# Multilingual support
-multilingual_model = pipeline("translation", model="facebook/mbart-large-50-many-to-many-mmt")
 
 # TMDB API configuration
 TMDB_API_KEY = "2d4a65d3f3fca1929295365d4fbe9745"

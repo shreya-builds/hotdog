@@ -1,14 +1,14 @@
-transformers
-streamlit
-torch
-sentence-transformers
-pandas
-numpy
-plotly
-scikit-learn
-datasets
-Pillow
-requests
+transformers==4.36.2
+streamlit==1.25.0
+torch==2.1.2
+sentence-transformers==2.2.2
+pandas==2.1.4
+numpy==1.26.2
+plotly==5.18.0
+scikit-learn==1.3.2
+datasets==2.15.0
+Pillow==10.1.0
+requests==2.31.0
 
 
 
