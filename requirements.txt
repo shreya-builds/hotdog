@@ -1,6 +1,14 @@
 transformers
+streamlit
 torch
+sentence-transformers
+pandas
+numpy
+plotly
+scikit-learn
 datasets
+Pillow
+requests
 
 
 
